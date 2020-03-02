@@ -1,1 +1,3 @@
 rootProject.name = 'syncmicroservice'
+
+include ':master-service', ':sync-service'

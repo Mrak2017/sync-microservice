@@ -4,10 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SyncmicroserviceApplication {
+public class MasterServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SyncmicroserviceApplication.class, args);
+		SpringApplication.run(MasterServiceApplication.class, args);
+		System.out.println("Hello world from master");
 	}
 
 }
