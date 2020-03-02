@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+
+  sync-service:
+    container_name: sync-service-builder
+    build:
+      context: .
+      args:
+        - ARTIFACT_NAME=sync-service-0.0.1.jar
+      dockerfile: build-sync-service-dockerfile
+
+  master-service:
+    container_name: master-service-builder
+    build:
+      context: .
+      args:
+        - ARTIFACT_NAME=master-service-0.0.1.jar
+      dockerfile: build-master-service-dockerfile

@@ -1,0 +1,17 @@
+FROM openjdk:13-alpine AS TEMP_BUILD_IMAGE
+ENV APP_HOME=/opt
+WORKDIR $APP_HOME
+COPY build.gradle settings.gradle gradlew $APP_HOME/
+COPY gradle $APP_HOME/gradle
+# caching gradle dependencies
+RUN ./gradlew build || 0
+COPY sync-service $APP_HOME/sync-service
+RUN ./gradlew sync-service:clean sync-service:bootJar
+
+FROM openjdk:13-alpine
+ARG ARTIFACT_NAME
+ENV APP_HOME=/opt
+WORKDIR $APP_HOME
+COPY --from=TEMP_BUILD_IMAGE $APP_HOME/sync-service/build/libs/$ARTIFACT_NAME $APP_HOME/
+EXPOSE 8080
+CMD java -jar $APP_HOME/$ARTIFACT_NAME

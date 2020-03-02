@@ -1,0 +1,17 @@
+FROM openjdk:13-alpine AS TEMP_BUILD_IMAGE
+ENV APP_HOME=/opt/microservices
+WORKDIR $APP_HOME
+COPY build.gradle settings.gradle gradlew $APP_HOME/
+COPY gradle $APP_HOME/gradle
+# caching gradle dependencies
+RUN ./gradlew build || 0
+COPY master-service $APP_HOME/master-service
+RUN ./gradlew master-service:clean master-service:bootJar
+
+FROM openjdk:13-alpine
+ARG ARTIFACT_NAME
+ENV APP_HOME=/opt/microservices
+WORKDIR $APP_HOME
+COPY --from=TEMP_BUILD_IMAGE $APP_HOME/master-service/build/libs/$ARTIFACT_NAME $APP_HOME/
+EXPOSE 8080
+CMD java -jar $APP_HOME/$ARTIFACT_NAME
