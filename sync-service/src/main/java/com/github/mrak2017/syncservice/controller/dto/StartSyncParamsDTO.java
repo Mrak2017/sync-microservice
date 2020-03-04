@@ -1,4 +1,4 @@
-package com.github.mrak2017.syncmicroservice.controller.dto;
+package com.github.mrak2017.syncservice.controller.dto;
 
 import java.time.LocalDateTime;
 

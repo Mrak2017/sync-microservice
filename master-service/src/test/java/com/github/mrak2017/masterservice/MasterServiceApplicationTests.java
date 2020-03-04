@@ -1,4 +1,4 @@
-package com.github.mrak2017.syncmicroservice;
+package com.github.mrak2017.masterservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

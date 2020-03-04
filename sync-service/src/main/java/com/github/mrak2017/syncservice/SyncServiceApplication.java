@@ -1,4 +1,4 @@
-package com.github.mrak2017.syncmicroservice;
+package com.github.mrak2017.syncservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,7 +8,6 @@ public class SyncServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SyncServiceApplication.class, args);
-		System.out.println("Hello world from sync");
 	}
 
 }

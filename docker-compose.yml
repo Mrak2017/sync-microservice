@@ -2,14 +2,30 @@ version: '3.1'
 
 services:
 
+  nginx-balancer:
+    container_name: balancer
+    image: nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8101:80
+      - 443:443
+
   master-service:
     container_name: master
+    restart: unless-stopped
     image: sync-microservice_master-service:latest
     environment:
       - ARTIFACT_NAME=master-service-0.0.1.jar
+    ports:
+      - 8001:8080
 
   sync-service:
     container_name: sync
+    restart: unless-stopped
     image: sync-microservice_sync-service:latest
     environment:
       - ARTIFACT_NAME=sync-service-0.0.1.jar
+    ports:
+      - 8002:8080
