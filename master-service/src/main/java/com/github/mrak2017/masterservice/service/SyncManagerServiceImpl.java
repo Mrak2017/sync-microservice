@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class SyncManagerServiceImpl implements SyncManagerService {
-    final String uri = "http://localhost:8101/sync-api/";
+    final String uri = "http://nginx-balancer:80/sync-api/";
 
     @Override
     public void startSync() {
