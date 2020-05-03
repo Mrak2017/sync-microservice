@@ -16,7 +16,17 @@ services:
     environment:
       - ARTIFACT_NAME=master-service-0.0.1.jar
     depends_on:
-      - database
+      - master-database
+
+  master-database:
+    container_name: master-db
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: master-microservices
+    ports:
+      - 5588:5432
 
   sync-service:
     container_name: sync
@@ -24,15 +34,4 @@ services:
     image: sync-microservice_sync-service:latest
     environment:
       - ARTIFACT_NAME=sync-service-0.0.1.jar
-    depends_on:
-      - database
 
-  database:
-    container_name: db
-    image: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: microservices
-    ports:
-      - 5588:5432

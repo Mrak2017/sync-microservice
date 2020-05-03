@@ -2,8 +2,8 @@ package com.github.mrak2017.masterservice.service;
 
 import com.github.mrak2017.masterservice.dto.StartSyncParamsDTO;
 import com.github.mrak2017.masterservice.dto.SyncCommandResultDTO;
-import com.github.mrak2017.masterservice.model.SimpleEntity;
-import com.github.mrak2017.masterservice.repository.SimpleEntityRepository;
+import com.github.mrak2017.masterservice.model.Author;
+import com.github.mrak2017.masterservice.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,10 +11,10 @@ import org.springframework.web.client.RestTemplate;
 public class SyncManagerServiceImpl implements SyncManagerService {
     final String uri = "http://nginx-balancer:80/sync-api/";
 
-    private final SimpleEntityRepository simpleEntityRepository;
+    private final AuthorRepository authorRepository;
 
-    public SyncManagerServiceImpl(SimpleEntityRepository simpleEntityRepository) {
-        this.simpleEntityRepository = simpleEntityRepository;
+    public SyncManagerServiceImpl(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
     }
 
     @Override
@@ -44,10 +44,9 @@ public class SyncManagerServiceImpl implements SyncManagerService {
 
     @Override
     public Boolean testDBSave() {
-        SimpleEntity test = new SimpleEntity();
-        test.setDescription("Hello microservice");
+        Author test = new Author();
 
-        simpleEntityRepository.save(test);
+        authorRepository.save(test);
         return test.getId() > 0;
     }
 
