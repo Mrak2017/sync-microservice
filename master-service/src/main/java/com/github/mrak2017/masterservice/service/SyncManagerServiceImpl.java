@@ -2,10 +2,12 @@ package com.github.mrak2017.masterservice.service;
 
 import com.github.mrak2017.masterservice.dto.StartSyncParamsDTO;
 import com.github.mrak2017.masterservice.dto.SyncCommandResultDTO;
-import com.github.mrak2017.masterservice.model.Author;
+import com.github.mrak2017.masterservice.model.entity.Author;
 import com.github.mrak2017.masterservice.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDate;
 
 @Service
 public class SyncManagerServiceImpl implements SyncManagerService {
@@ -29,12 +31,12 @@ public class SyncManagerServiceImpl implements SyncManagerService {
         }
     }
 
+    //TODO: rewrite
     @Override
     public Boolean testConnection() {
         try {
             RestTemplate restTemplate = new RestTemplate();
             String result = restTemplate.getForObject(uri, String.class);
-            System.out.println(result);
             return result.equals("OK");
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,12 +44,18 @@ public class SyncManagerServiceImpl implements SyncManagerService {
         }
     }
 
+    //TODO: delete
     @Override
     public Boolean testDBSave() {
         Author test = new Author();
+        test.setName("123");
+        test.setDescription("123");
+        test.setPublishDate(LocalDate.now());
 
         authorRepository.save(test);
-        return test.getId() > 0;
+        Boolean result = test.getId() > 0;
+        authorRepository.delete(test);
+        return result;
     }
 
 }

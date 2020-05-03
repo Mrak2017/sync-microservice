@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+
+    <changeSet id="create table mtr_author" author="m.pavlov" >
+        <createTable tableName="mtr_author">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="mtr_author_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="name" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publish_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table mtr_gateway" author="m.pavlov" >
+        <createTable tableName="mtr_gateway">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="mtr_gateway_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="code" type="varchar(10)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="name" type="varchar(500)"/>
+            <column name="last_sync_date" type="datetime"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table mtr_guided_entity" author="m.pavlov" >
+        <createTable tableName="mtr_guided_entity">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="mtr_guided_entity_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="guid" type="${uuid_type}">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="gateway_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_mtr_guided_entity_mtr_gateway" references="mtr_gateway(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table mtr_guided_link_base" author="m.pavlov" >
+        <createTable tableName="mtr_guided_link_base">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="mtr_guided_link_base_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="link_type" type="varchar(500)">
+                <constraints nullable="false" />
+            </column>
+            <column name="guid" type="${uuid_type}">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="guided_entity_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_mtr_guided_link_base_mtr_guided_entity" references="mtr_guided_entity(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add guided entity link to author" author="m.pavlov">
+        <addColumn tableName="mtr_guided_link_base">
+            <column name="author_id" type="bigint">
+                <constraints foreignKeyName="fk_mtr_guided_link_base_mtr_author" references="mtr_author(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -16,21 +16,26 @@ public class MasterServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MasterServiceApplication.class, args);
-        System.out.println("Hello world from master");
     }
 
+    //TODO: delete
     @Scheduled(fixedDelay = 15000)
     private void testConnection() {
-        service.testConnection();
+        if (!service.testConnection()) {
+            throw new RuntimeException("Error test connection failed");
+        } else {
+            System.out.println("Connection test: OK");
+        }
         //service.startSync();
     }
 
+    //TODO: delete
     @PostConstruct
     private void onPostConstruct() {
         if (!service.testDBSave()) {
             throw new RuntimeException("Error saving to db");
         } else {
-            System.out.println("DB test OK");
+            System.out.println("DB test: OK");
         }
     }
 }
