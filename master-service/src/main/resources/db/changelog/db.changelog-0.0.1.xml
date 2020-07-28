@@ -27,9 +27,10 @@
             <column name="description" type="varchar(1000)">
                 <constraints nullable="false"/>
             </column>
-            <column name="publish_date" type="date">
+            <column name="birth_date" type="date">
                 <constraints nullable="false"/>
             </column>
+            <column name="death_date" type="date"/>
         </createTable>
     </changeSet>
 
@@ -70,7 +71,7 @@
             <column name="guid" type="${uuid_type}">
                 <constraints nullable="false" unique="true" />
             </column>
-            <column name="gateway_id" type="bigint">
+            <column name="gateway" type="bigint">
                 <constraints nullable="false" foreignKeyName="fk_mtr_guided_entity_mtr_gateway" references="mtr_gateway(id)"/>
             </column>
         </createTable>
@@ -105,6 +106,42 @@
         <addColumn tableName="mtr_guided_link_base">
             <column name="author_id" type="bigint">
                 <constraints foreignKeyName="fk_mtr_guided_link_base_mtr_author" references="mtr_author(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="create table mtr_book" author="m.pavlov" >
+        <createTable tableName="mtr_book">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="mtr_book_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="name" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publish_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_mtr_book_mtr_author" references="mtr_author(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add guided entity link to book" author="m.pavlov">
+        <addColumn tableName="mtr_guided_link_base">
+            <column name="book_id" type="bigint">
+                <constraints foreignKeyName="fk_mtr_guided_link_base_mtr_book" references="mtr_book(id)"/>
             </column>
         </addColumn>
     </changeSet>

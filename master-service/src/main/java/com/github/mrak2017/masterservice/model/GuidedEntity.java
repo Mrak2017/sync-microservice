@@ -18,7 +18,7 @@ public class GuidedEntity extends BaseEntity {
     @NotNull
     private UUID guid;
 
-    @ManyToOne
-    @JoinColumn(name = "gateway_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gateway", nullable = false)
     private Gateway gateway;
 }

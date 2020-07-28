@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 @Table(name = "mtr_gateway")
 public class Gateway extends BaseEntity {
 
-    @Column
+    @Column(length = 10)
     @NotNull
     private String code;
 
-    @Column
+    @Column(length = 500)
     private String name;
 
     @Column(name = "last_sync_date")

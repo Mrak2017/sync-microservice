@@ -4,17 +4,15 @@ import com.github.mrak2017.masterservice.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "mtr_author")
-public class Author extends BaseEntity {
+@Table(name = "mtr_book")
+public class Book  extends BaseEntity {
 
     @Column(length = 500)
     @NotNull
@@ -26,9 +24,9 @@ public class Author extends BaseEntity {
 
     @Column
     @NotNull
-    private LocalDate birthDate;
+    private LocalDate publishDate;
 
-    @Column
-    private LocalDate deathDate;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author", nullable = false)
+    private Author author;
 }

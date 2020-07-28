@@ -50,7 +50,7 @@ public class SyncManagerServiceImpl implements SyncManagerService {
         Author test = new Author();
         test.setName("123");
         test.setDescription("123");
-        test.setPublishDate(LocalDate.now());
+        test.setBirthDate(LocalDate.now());
 
         authorRepository.save(test);
         Boolean result = test.getId() > 0;

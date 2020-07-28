@@ -24,8 +24,4 @@ public class BaseEntity {
     @Column
     @UpdateTimestamp
     private LocalDateTime updateDate;
-
-    public Long getId() {
-        return id;
-    }
 }
