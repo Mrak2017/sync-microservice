@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+
+    <changeSet id="create table snc_author" author="m.pavlov" >
+        <createTable tableName="snc_author">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="snc_author_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birth_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="death_date" type="date"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table snc_gateway" author="m.pavlov" >
+        <createTable tableName="snc_gateway">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="snc_gateway_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="code" type="varchar(10)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="name" type="varchar(500)"/>
+            <column name="last_sync_date" type="datetime"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table snc_guided_entity" author="m.pavlov" >
+        <createTable tableName="snc_guided_entity">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="snc_guided_entity_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="guid" type="${uuid_type}">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="gateway" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_snc_guided_entity_snc_gateway" references="snc_gateway(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table snc_guided_link_base" author="m.pavlov" >
+        <createTable tableName="snc_guided_link_base">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="snc_guided_link_base_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="link_type" type="varchar(500)">
+                <constraints nullable="false" />
+            </column>
+            <column name="guid" type="${uuid_type}">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="guided_entity_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_snc_guided_link_base_snc_guided_entity" references="snc_guided_entity(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add guided entity link to author" author="m.pavlov">
+        <addColumn tableName="snc_guided_link_base">
+            <column name="author_id" type="bigint">
+                <constraints foreignKeyName="fk_snc_guided_link_base_snc_author" references="snc_author(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="create table snc_book" author="m.pavlov" >
+        <createTable tableName="snc_book">
+            <!-- BaseEntity fields START -->
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="snc_book_id_pk"/>
+            </column>
+            <column name="insert_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="datetime" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <!-- BaseEntity fields FINISH -->
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publish_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_guid" type="${uuid_type}">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add guided entity link to book" author="m.pavlov">
+        <addColumn tableName="snc_guided_link_base">
+            <column name="book_id" type="bigint">
+                <constraints foreignKeyName="fk_snc_guided_link_base_snc_book" references="snc_book(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
